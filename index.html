@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta de Peach</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .fondo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+    filter: brightness(1.2) blur(0);
+    transition: filter 2s ease-in-out;
+
+    background-image: url('background.jpg'); /* Ruta de la imagen */
+    background-repeat: repeat-x; /* Repetir solo en horizontal */
+    background-size: auto 100%; /* Ajustar la altura al 100% */
+}
+
+
+        /* Aplicar desenfoque al fondo */
+        .fondo.blur-active {
+            filter: brightness(1.2) blur(5px); /* Desenfoque aplicado gradualmente */
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .mensaje {
+            position: absolute;
+            top: 10%;
+            font-size: 28px;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .carta {
+            position: absolute;
+            width: 400px;
+            height: 500px;
+            background: url('letter.png') no-repeat center center/contain;
+            background-size: contain;
+            opacity: 0; /* Inicialmente invisible */
+            transform: translateY(100vh);
+            transition: transform 2s ease-out, opacity 2s ease-in;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .carta.mostrar {
+            opacity: 1; /* Mostrar gradualmente */
+            transform: translateY(0);
+        }
+
+        .contenido {
+            position: absolute;
+            width: 80%;
+            text-align: center;
+            font-size: 28px;
+            color: black;
+            font-family: 'Arial', sans-serif;
+            opacity: 0;
+            transition: opacity 2s ease-in 2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .mostrar-texto {
+            opacity: 1 !important;
+        }
+
+        .controles {
+            position: absolute;
+            bottom: 10%;
+            font-size: 18px;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Fondo independiente con una imagen -->
+    <div class="fondo">
+    </div>
+
+    <div class="mensaje">Toca en cualquier parte para comenzar</div>
+    <div class="carta">
+        <div class="contenido">Querida mia:<br><br>Por favor, sé mi Valentin este 14 de febrero ❤️ <br>I love u so much.<br><br>Atentamente, Tu bby 💕</div>
+    </div>
+    
+    <audio id="audio" src="audio.mp3"></audio>
+    <script>
+        let animacionIniciada = false;
+        let animacionPausada = false;
+        const carta = document.querySelector('.carta');
+        const contenido = document.querySelector('.contenido');
+        const mensaje = document.querySelector('.mensaje');
+        const audio = document.getElementById('audio');
+        const fondo = document.querySelector('.fondo');
+
+        document.body.addEventListener('click', () => {
+            if (!animacionIniciada) {
+                mensaje.style.display = 'none';
+                fondo.classList.add('blur-active'); // Aplicar desenfoque al fondo
+                carta.classList.add('mostrar'); // Mostrar la carta
+                setTimeout(() => contenido.classList.add('mostrar-texto'), 500); // Mostrar el contenido
+                audio.play();
+                animacionIniciada = true;
+            }
+        });
+
+        function toggleAnimacion() {
+            if (animacionPausada) {
+                carta.style.animationPlayState = 'running';
+                contenido.style.animationPlayState = 'running';
+                audio.play();
+            } else {
+                carta.style.animationPlayState = 'paused';
+                contenido.style.animationPlayState = 'paused';
+                audio.pause();
+            }
+            animacionPausada = !animacionPausada;
+        }
+    </script>
+</body>
+</html>
